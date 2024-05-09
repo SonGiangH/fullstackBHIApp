@@ -3,19 +3,22 @@ import { SurveyDTO } from './../dtos/survey.dto';
 import { Component, OnInit } from '@angular/core';
 import { ToolService } from '../services/tool.service';
 import { ToolDTO } from '../dtos/tool.dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
+
 export class HomeComponent implements OnInit {
   surveys: SurveyDTO[] = [];
   tool: ToolDTO = new ToolDTO(0); // Initialize tool object as null
 
   constructor(
     private surveyService: SurveyService,
-    private toolService: ToolService
+    private toolService: ToolService,
+    private router: Router
   ) {}
 
   // Load component xong thuc hien getAll() ngay
@@ -24,7 +27,7 @@ export class HomeComponent implements OnInit {
     this.getAllSurveys();
   }
 
-  // Update calculated survey
+  // Process survey
   updateAllSurveys() {
     this.surveyService.updateAllSurveys().subscribe({
       next: (response: any) => {
@@ -91,15 +94,17 @@ export class HomeComponent implements OnInit {
       },
     })
   }
+
   // delete survey by ID
   deleteSurvey(id: number) {
     this.surveyService.deleteSurveyByID(id).subscribe({
-      next: (response: any) => {
-        console.log('Survey deleted successfully:', response);
+      next: () => {
         this.surveyService.getAllSurveys;
+        this.router.navigate(['sliding-sheet'])
       },
       complete: () => {
         this.surveyService.getAllSurveys;
+        this.router.navigate(['sliding-sheet'])        
       },
       error: (error: any) => {
         alert(`Cannot delete survey, error: ${error.error});
@@ -124,4 +129,23 @@ export class HomeComponent implements OnInit {
       },
     });
   }
+
+  // condition to display arrow up and down for toolface
+  isToolfaceInRange(toolface: string): 'up' | 'down' | '' {
+    if (toolface.trim() === '') {
+      return ''; // Return empty string if toolface is empty
+    }
+    
+    const value = parseFloat(toolface);
+    
+    if (!isNaN(value)) {
+      if (value > 90 && value < 270) {
+        return 'down';
+      } else if ((value < 90 && value > 0) || (value > 270 && value < 360)) {
+        return 'up';
+      }
+    }
+    
+    return '';
+  }  
 }
