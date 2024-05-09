@@ -14,6 +14,9 @@ export class EditSurveyComponentComponent implements OnInit {
   inc: number;
   azi: number;
   dlsWa: number;
+  toolFace: number;
+  st: number;
+  ed: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +27,9 @@ export class EditSurveyComponentComponent implements OnInit {
     this.inc = 0;
     this.azi = 0;
     this.dlsWa = 0;
+    this.toolFace =0;
+    this.st =0;
+    this.ed =0;
 
     this.survey = {
       id: 0,
@@ -102,9 +108,9 @@ export class EditSurveyComponentComponent implements OnInit {
       dlsWa: 0,
       dls30m: 0,
       motorYield: 0,
-      toolface: '',
-      st: 0,
-      ed: 0,
+      toolface: this.survey.toolface,
+      st: this.survey.st,
+      ed: this.survey.ed,
       totalslid: 0,
       slidseen: 0,
       slidunseen: 0,
@@ -114,11 +120,11 @@ export class EditSurveyComponentComponent implements OnInit {
     this.surveyService.updateSurveyById(surveyDTO, this.survey.id).subscribe({
       next: () => {
         // redirect to home component
-        this.router.navigate(['']);
+        this.router.navigate(['sliding-sheet']);
       },
       complete: () => {
         // redirect to home component
-        this.router.navigate(['']);
+        this.router.navigate(['sliding-sheet']);
       },
       error: (error: any) => {
         alert(`Cannot update survey, error: ${error.error});
