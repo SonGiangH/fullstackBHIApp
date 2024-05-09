@@ -1,0 +1,200 @@
+<app-header></app-header>
+<div class="container d-flex flex-column align-items-center">
+  <h1 class="text-center mb-5">Steering Force Calculator - STEER MODE</h1>
+  <!-- Dog Leg Gradient -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Dog Leg Gradient (DLG)</div>
+    <div class="title2 box">&#176; / 30m / %</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.doglegGradient }}
+    </div>
+    <!-- Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-2"
+          (click)="increaseDlBase()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseDlBase()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Steer Force -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Steer Force</div>
+    <div class="title2 box">%</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.steerForce | number : "1.2-2" }}
+    </div>
+    <!-- Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-2"
+          (click)="increaseSteerForce()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseSteerForce()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Steer Direction -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Steer Direction</div>
+    <div class="title2 box">deg</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.steerDirection | number : "1.1-1" }}
+    </div>
+    <!-- Small Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon1 mb-2"
+          (click)="increaseSDSmall()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon1"
+          (click)="decreaseSDSmall()"
+        />
+      </div>
+    </div>
+    <!-- Big Button Controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-3"
+          (click)="increaseSDBig()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseSDBig()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Actual Inclination -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Actual Inclination</div>
+    <div class="title2 box">deg</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.actualHoleInc }}
+    </div>
+    <!-- Small Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon1 mb-2"
+          (click)="increaseIncSmall()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon1"
+          (click)="decreaseIncSmall()"
+        />
+      </div>
+    </div>
+    <!-- Big Button Controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-3"
+          (click)="increaseIncBig()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseIncBig()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Result of Calculations -->
+  <div>
+    <!-- Expected DLS -->
+    <div class="ui-row-result mb-5">
+      <div class="title1 box fw-bold">Expected DLS</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.steerDLS | number : "1.1-1" }}
+      </div>
+    </div>
+    <!-- Expected BUR -->
+    <div class="ui-row-result mb-5">
+      <div class="title1 box fw-bold">Expected BUR</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.buildRate | number : "1.1-1" }}
+      </div>
+    </div>
+    <!-- Expected WR -->
+    <div class="ui-row-result mb-5">
+      <div class="title1 box fw-bold">Expected WR</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.walkRate | number : "1.1-1" }}
+      </div>
+    </div>
+  </div>
+  <!-- Setting default -->
+  <div class="fs-4 fst-italic">
+    <p>ATK G3 - FLEX STAB = 0.065</p>
+    <p>ATK G3 - MOD STAB = 0.045</p>
+  </div>
+</div>
+
+<app-footer></app-footer>

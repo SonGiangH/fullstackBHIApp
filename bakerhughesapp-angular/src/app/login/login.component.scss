@@ -1,0 +1,86 @@
+.login-form {
+    background-color: whitesmoke;
+    border-radius: 10px;
+    max-width: 500px;
+    padding: 20px;
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(1, 131, 116);
+}
+
+.form-control {
+    background-color: transparent;
+    border: none;
+}
+
+.form-control:focus {
+    outline: none;
+    color: black;
+    border-color: transparent;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+.divider-nospace {
+    border-top: 1px solid black;
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.checkbox-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.login-button {
+    background: linear-gradient(to right,rgb(1, 131, 116), white);
+    border-radius: 30px;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
+    border: none;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    transition: box-shadow 0.3s ease;
+}
+
+.login-button:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.divider {
+    height: 1px;
+    background-color: rgb(1, 131, 116);
+    margin: 20px;
+}
+
+.register-link {
+    text-decoration: none;
+    color: rgb(1, 131, 116);
+}
+
+.access-right {
+    margin-top: 20px;
+    border: rgb(1, 131, 116);
+    width: 200px;
+}

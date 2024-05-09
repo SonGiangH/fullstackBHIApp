@@ -1,0 +1,74 @@
+#scp -pr . root@14.225.205.63:/root/
+
+version: '3.7'
+services:
+  mysql8-container:
+    container_name: mysql8-container
+    image: mysql:8.2.0    
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bhiapp
+    ports:
+      - 3307:3306
+    #volumes: 
+    #- ./sql/shopapp.sql:/docker-entrypoint-initdb.d/init-script.sql
+    networks:
+      - bhiapp-network  
+
+  phpmyadmin8-container:
+    #intel host
+    image: phpmyadmin/phpmyadmin
+    #mac m1 host
+    #image: arm64v8/phpmyadmin     
+    container_name: phpmyadmin8-container
+    restart: always
+    depends_on:
+      - mysql8-container      
+    ports:
+      - "8100:80" #port mapping
+    environment:
+      PMA_HOST: mysql8-container #phpMyAdmin Host, PMA = PHP My Amin
+    networks:
+      - bhiapp-network
+  
+  bhiapp-spring-container:    
+    container_name: bhiapp-spring-container    
+    build:
+      context: .
+      dockerfile: DockerfileJavaSpring      
+      #docker tag <image_id> shopapp-spring:1.0.0    
+    ports:
+      - 8099:8088
+    environment:
+      #SPRING_DATASOURCE_URL: jdbc:mysql://mysql8-container:3306/ShopApp?serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql8-container:3306/bhiapp?serverTimezone=UTC&allowPublicKeyRetrieval=true            
+      MYSQL_ROOT_PASSWORD: 123456
+    depends_on:      
+      - mysql8-container
+    networks:
+      - bhiapp-network  
+    
+#docker-compose -f ./deployment.yaml down 
+
+#docker-compose -f ./deployment.yaml rm -s -f mysql8-container
+#docker-compose -f ./deployment.yaml up -d mysql8-container
+
+#docker-compose -f ./deployment.yaml rm -s -f phpmyadmin8-container
+#docker-compose -f ./deployment.yaml up -d phpmyadmin8-container
+
+
+#docker-compose -f ./deployment.yaml rm -s -f shopapp-spring-container 
+#docker-compose -f ./deployment.yaml up -d bhiapp-spring-container
+#docker logs shopapp-spring-container
+
+#docker-compose -f ./deployment.yaml rm -s -f redis-container
+#docker-compose -f ./deployment.yaml up -d redis-container
+
+networks:
+  bhiapp-network:
+    name: bhiapp-network
+    driver: bridge
+
+
+

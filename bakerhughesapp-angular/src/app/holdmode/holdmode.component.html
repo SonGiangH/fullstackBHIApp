@@ -1,0 +1,240 @@
+<app-header></app-header>
+
+<div class="container d-flex flex-column align-items-center">
+  <h1 class="text-center mb-5">
+    Steering Force Calculator - HOLD / BUILD MODE
+  </h1>
+  <!-- Dog Leg Gradient -->
+  <div class="ui-row-result mb-3">
+    <div class="title1 box fw-bold">Dog Leg Gradient (DLG)</div>
+    <div class="title2 box">&#176; / 30m / %</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.doglegGradient }}
+    </div>
+    <!-- Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-2"
+          (click)="increaseDlBase()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseDlBase()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Actual Inclination -->
+  <div class="ui-row-result mb-3">
+    <div class="title1 box fw-bold">Actual Inclination</div>
+    <div class="title2 box">deg</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.actualHoleInc }}
+    </div>
+    <!-- Small Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon1 mb-2"
+          (click)="increaseIncSmall()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon1"
+          (click)="decreaseIncSmall()"
+        />
+      </div>
+    </div>
+    <!-- Big Button Controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-3"
+          (click)="increaseIncBig()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseIncBig()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Target Inclination -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Target Inclination</div>
+    <div class="title2 box">deg</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.targetInclination }}
+    </div>
+    <!-- Small Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon1 mb-2"
+          (click)="increaseTIsmall()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon1"
+          (click)="decreaseTIsmall()"
+        />
+      </div>
+    </div>
+    <!-- Big Button Controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-3"
+          (click)="increaseTIBig()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseTIBig()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Build Force -->
+  <div class="ui-row-result mb-1">
+    <div class="title1 box fw-bold">Build Force</div>
+    <div class="title2 box">%</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.buildForce | number : "1.2-2" }}
+    </div>
+    <!-- Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-2"
+          (click)="increaseBuildForce()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseBuildForce()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Walk Force -->
+  <div class="ui-row-result mb-5">
+    <div class="title1 box fw-bold">Walk Force</div>
+    <div class="title2 box">%</div>
+    <div
+      class="result box fw-bold fs-2"
+      style="background-color: yellow; color: red"
+    >
+      {{ direction.walkForce | number : "1.2-2" }}
+    </div>
+    <!-- Button controller -->
+    <div class="button-controller">
+      <div>
+        <img
+          src="assets/circle-button-up.png"
+          alt="Icon"
+          class="icon mb-2"
+          (click)="increaseWalkForce()"
+        />
+      </div>
+      <div>
+        <img
+          src="assets/circle-button-down.png"
+          alt="Icon"
+          class="icon"
+          (click)="decreaseWalkForce()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Result of Calculations -->
+  <div>
+    <!-- Expected DLS -->
+    <div class="ui-row-result mb-1">
+      <div class="title1 box fw-bold">Expected DLS</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.holdModeDLS | number : "1.1-1" }}
+      </div>
+    </div>
+    <!-- Expected BUR -->
+    <div class="ui-row-result mb-1">
+      <div class="title1 box fw-bold">Expected BUR</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.holdModeBuildRate | number : "1.1-1" }}
+      </div>
+    </div>
+    <!-- Expected WR -->
+    <div class="ui-row-result mb-1">
+      <div class="title1 box fw-bold">Expected WR</div>
+      <div class="title2 box">&#176; / 30m</div>
+      <div class="result box fw-bold fs-4" style="background-color: gray">
+        {{ direction.holdModeWalkRate | number : "1.2-2" }}
+      </div>
+    </div>
+  </div>
+  <!-- Setting default -->
+  <div class="fs-4 fst-italic mt-5">
+    <p>
+      Resultant Steer Force =
+      {{ direction.resultantSteerForce | number : "1.2-2" }}
+    </p>
+    <p>
+      Resulant Direction =
+      {{ direction.resultantDirection | number : "1.2-2" }}
+    </p>
+  </div>
+</div>
+
+<app-footer></app-footer>

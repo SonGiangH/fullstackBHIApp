@@ -1,0 +1,43 @@
+.ui-row-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 700px;
+    background-color: white;
+  }
+
+.box {
+    width: 600px;
+    height: 90px;
+    padding: 10px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+.button-controller {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid black;
+  height: 90px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+}

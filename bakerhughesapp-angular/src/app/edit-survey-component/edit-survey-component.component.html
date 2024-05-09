@@ -1,0 +1,106 @@
+<h1>Edit Suvey by ID : {{ survey.id }}</h1>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">DP Length</th>
+      <th scope="col">Bit Depth</th>
+      <th scope="col">Survey Depth</th>
+      <th scope="col">Inc</th>
+      <th scope="col">Azi</th>
+      <th scope="col">Dls(WA) /30m</th>
+      <th scope="col">Meters SEEN</th>      
+      <th scope="col">DLS/ 30m</th>
+      <th scope="col">Motor Yield</th>
+      <th scope="col">ToolFace</th>
+      <th scope="col">From</th>
+      <th scope="col">To</th>
+      <th scope="col">Total Slid Dist</th>
+      <th scope="col">Seen - Unseen</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row" class="align-middle">{{ survey.id }}</th>
+      <td class="align-middle">
+        {{ survey.dp_length | number : "1.2-2" }}
+      </td>
+      <td class="align-middle">{{ survey.bit_depth }}</td>
+      <!-- Update section -->
+      <td class="align-middle text-primary fw-bold">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="survey.survey_depth"
+          name="surveyDepth"
+          id="surveyDepth"
+        />
+      </td>
+      <td class="align-middle text-primary fw-bold">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="survey.inc"
+          name="inc"
+          id="inc"
+        />
+      </td>
+      <td class="align-middle text-primary fw-bold">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="survey.azi"
+          name="azi"
+          id="azi"
+        />
+      </td>
+      <td class="align-middle text-primary fw-bold">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="survey.dlsWa"
+          name="dlsWa"
+          id="dlsWa"
+        />
+      </td>
+      <!-- End of update section -->
+      <td class="align-middle">
+        {{ survey.totalseen !== 0 ? survey.totalseen : "-" }}
+      </td>      
+      <td class="align-middle">
+        {{ survey.dls30m !== 0 ? survey.dls30m : "-" }}
+      </td>
+      <td class="align-middle">
+        {{ survey.motorYield !== 0 ? survey.motorYield : "-" }}
+      </td>
+      <td class="align-middle">{{ survey.toolface }}</td>
+      <td class="align-middle">{{ survey.st !== 0 ? survey.st : "-" }}</td>
+      <td class="align-middle">{{ survey.ed !== 0 ? survey.ed : "-" }}</td>
+      <td class="align-middle">
+        {{ survey.totalslid !== 0 ? survey.totalslid : "-" }}
+      </td>
+      <td class="mt-2">
+        <table class="table mb-0">
+          <tr>
+            <td class="align-middle">
+              {{ survey.slidseen | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">
+              {{ survey.slidunseen | number : "1.2-2" }}
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td class="align-middle">
+        <button
+          type="button"
+          (click)="editSurveyById()"
+          class="btn btn-primary"
+        >
+          Save Changes
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
