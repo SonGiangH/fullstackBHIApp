@@ -40,6 +40,7 @@ export class SurveyformComponent {
       totalslid: 0,
       slidseen: 0,
       slidunseen: 0,
+      meterAhead: 0,
     };
 
     // create new survey

@@ -48,6 +48,7 @@ export class EditSurveyComponentComponent implements OnInit {
       totalslid: 0,
       slidseen: 0,
       slidunseen: 0,
+      meterAhead: 0
     };
   }
 
@@ -81,6 +82,7 @@ export class EditSurveyComponentComponent implements OnInit {
             totalslid: existingSurvey.totalSlid,
             slidseen: existingSurvey.slidSeen,
             slidunseen: existingSurvey.slidUnseen,
+            meterAhead: existingSurvey.meterAhead
           };
         },
         complete: () => {},
@@ -114,6 +116,7 @@ export class EditSurveyComponentComponent implements OnInit {
       totalslid: 0,
       slidseen: 0,
       slidunseen: 0,
+      meterAhead: 0
     };
 
     // update survey

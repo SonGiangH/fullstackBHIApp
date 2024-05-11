@@ -5,6 +5,7 @@ import { ToolService } from '../services/tool.service';
 import { ToolDTO } from '../dtos/tool.dto';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -50,6 +51,7 @@ export class HomeComponent implements OnInit {
             totalslid: survey.totalSlid,
             slidseen: survey.slidSeen,
             slidunseen: survey.slidUnseen,
+            meterAhead: survey.meterAhead,
           };
         });
       },
@@ -84,6 +86,7 @@ export class HomeComponent implements OnInit {
             totalslid: survey.totalSlid,
             slidseen: survey.slidSeen,
             slidunseen: survey.slidUnseen,
+            meterAhead: survey.meterAhead
           };
         });
       },

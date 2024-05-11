@@ -15,6 +15,7 @@ export class SurveyDTO {
   totalslid: number = 0;
   slidseen: number = 0;
   slidunseen: number = 0;
+  meterAhead:number = 0;
 
   constructor(data: any) {
     this.dp_length = data.dpLength;
@@ -32,5 +33,6 @@ export class SurveyDTO {
     this.totalslid = data.totalslid;
     this.slidseen = data.slidseen;
     this.slidunseen = data.slidunseen;
+    this.meterAhead = data.meterAhead;
   }
 }

@@ -19,6 +19,8 @@ import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ToolService } from './tool.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,7 @@ import { ToolService } from './tool.service';
     LoginComponent,
     RegisterComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, MatTabsModule],
   providers: [SurveyService, 
     ToolService, 
     {provide: LocationStrategy, useClass: HashLocationStrategy}],
