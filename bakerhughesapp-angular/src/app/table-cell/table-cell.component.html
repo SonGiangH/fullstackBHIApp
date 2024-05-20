@@ -1,0 +1,44 @@
+<table class="table table-striped table-responsive">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Survey Depth (m)</th>
+        <th scope="col">Inclination (deg)</th>
+        <th scope="col">Azimuth (deg)</th>   
+        <th scope="col">DLS (deg/30m)</th>       
+        <th scope="col">Toolface change (deg)</th>     
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Start</td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey1.depth" name="survey1Depth" id="survey1Depth"/>
+        </td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey1.inclination" name="survey1Incl" id="survey1Incl"/>
+        </td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey1.azimuth" name="survey1Azi" id="survey1Azi"/>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>End</td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey2.depth" name="survey2Depth" id="survey2Depth"/>
+        </td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey2.inclination" name="survey2Incl" id="survey2Incl"/>
+        </td>
+        <td>
+            <input  type="number" class="form-control" [(ngModel)]="survey2.azimuth" name="survey2Azi" id="survey2Azi"/>
+        </td>
+        <td class="fw-bold text-danger">{{result.DLS.toFixed(2)}}</td>
+        <td class="fw-bold">{{result.toolFace.toFixed(0)}}</td>        
+      </tr>
+    </tbody>
+    <button type="button" class="btn fw-bold bg-warning text-danger shadow-btn my-3" (click)="calculateDLS()">
+        Calculate </button> 
+  </table>

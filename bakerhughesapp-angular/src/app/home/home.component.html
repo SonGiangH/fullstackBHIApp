@@ -1,132 +1,434 @@
 <app-header></app-header>
 <div class="container-fluid my-4" *ngIf="surveys">
   <h1 class="my-4">Motor Sliding Sheet created by Son Giang</h1>
-  <div class="ml-0 d-flex flex-column float-start mb-2" style="width: 300px">
-    <p class="fw-bold text-white" style="margin-left: -25%">
-      Current Sensor Offset:
-      <span class="text-info">{{ tool.sensor_offset || 0 }}</span> m
-    </p>
-    <p class="fw-bold text-white" style="margin-left: -10%">
-      Default Motor Output:
-      <span class="text-info">{{ tool.default_bur || 0 }}</span> deg/30m
-    </p>
+  <div class="d-flex w-25 justify-content-between mb-3">
+    <button mat-raised-button shadow-btn (click)="toggleFormsDivVisibility()">
+      Input Form
+    </button>
+    <button mat-raised-button shadow-btn (click)="toggleDLSDivVisibility()">
+      DLS Calculator
+    </button>
   </div>
-  <table class="table table-striped table-responsive">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">DP Length</th>
-        <th scope="col">Bit Depth</th>
-        <th scope="col">Survey Depth</th>
-        <th scope="col">Inc</th>
-        <th scope="col">Azi</th>
-        <th scope="col">Meters SEEN</th>
-        <th scope="col">Dls(WA) /30m</th>
-        <th scope="col">DLS/ 30m</th>
-        <th scope="col">Motor Yield</th>
-        <th scope="col">ToolFace</th>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
-        <th scope="col">Total Slid Dist</th>
-        <th scope="col">Seen - Unseen</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let survey of surveys">
-        <th scope="row" class="align-middle">{{ survey.id }}</th>
-        <td class="align-middle">
-          {{  survey.dp_length !== 0 ?  survey.dp_length.toFixed(2) : "-" }}
-        </td>
-        <td class="align-middle">{{ survey.bit_depth.toFixed(2) }}</td>
-        <td class="align-middle text-primary fw-bold">
-          {{ survey.survey_depth | number : "1.2-2" }}
-        </td>
-        <td class="align-middle text-primary fw-bold">{{ survey.inc }}</td>
-        <td class="align-middle text-primary fw-bold">{{ survey.azi }}</td>
-        <td class="align-middle">
-          {{ survey.totalseen !== 0 ? survey.totalseen.toFixed(2) : "-" }}
-        </td>
-        <td class="align-middle">
-          {{ survey.dlsWa !== 0 ? survey.dlsWa.toFixed(2) : "-" }}
-        </td>
-        <td class="align-middle">
-          {{ survey.dls30m !== 0 ? survey.dls30m.toFixed(2) : "-" }}
-        </td>
-        <td class="align-middle text-danger fw-bold">
-          {{ survey.motorYield !== 0 ? survey.motorYield.toFixed(2) : "-" }}
-        </td>
-        <!-- condition process toolface to add arrow icon -->
-        <ng-container *ngIf="isToolfaceInRange(survey.toolface) !== ''">
-          <td class="align-middle">
-            {{ survey.toolface }}
-            <i class="fa" 
-              [ngClass]="{'fa-arrow-down text-danger': isToolfaceInRange(survey.toolface) === 'down', 
-                          'fa-arrow-up text-success ': isToolfaceInRange(survey.toolface) === 'up'}"
-              aria-hidden="true">
-            </i>
-          </td>
-        </ng-container>
-        <ng-container *ngIf="isToolfaceInRange(survey.toolface) === ''">
-          <td></td>
-        </ng-container>       
-                        
-        <td class="align-middle text-danger fw-bold">{{ survey.st !== 0 ? survey.st.toFixed(2) : "-" }}</td>
-        <td class="align-middle text-danger fw-bold">{{ survey.ed !== 0 ? survey.ed.toFixed(2) : "-" }}</td>
-        <td class="align-middle">
-          {{ survey.totalslid !== 0 ? survey.totalslid : "-" }}
-        </td>
-        <td class="mt-2">
-          <table class="table mb-0">
-            <tr>
-              <td class="align-middle" style="width: 50%;">
-                {{ survey.slidseen !== 0 ? survey.slidseen.toFixed(2) : "-" }}
-              </td>
-              <td class="align-middle" style="width: 50%;">
-                {{ survey.slidunseen !== 0 ? survey.slidunseen.toFixed(2) : "-" }}
-              </td>
-            </tr>
-          </table>
-        </td>
-        <td class="align-middle">
-          <a
-            href=""
-            style="margin-right: 20px"
-            (click)="deleteSurvey(survey.id)"
-            >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
-              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-            </svg>
-            </a
-          >
-          <a href="" [routerLink]="['/edit', survey.id]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" viewBox="0 0 512 512">
-              <path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/>
-            </svg>
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button type="button" class="btn fw-bold bg-warning text-danger shadow-btn my-3" (click)="updateAllSurveys()">>>> Process <<< </button>
-    
-  <div class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
+  <!-- input form div -->
+  <div *ngIf="isFormsDivVisible" class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
     <!-- Column for Survey Form -->
     <div class="col-lg-4 col-md-6 mb-4">
-      <app-surveyform></app-surveyform>      
-    </div>
-  
+      <app-surveyform></app-surveyform>
+    </div>  
     <!-- Column for Sliding Form -->
     <div class="col-lg-4 col-md-6 mb-4">
       <app-slidingform></app-slidingform>
-    </div>
-  
+    </div>  
     <!-- Column for Tool Form -->
     <div class="col-lg-4 col-md-6 mb-4">
       <app-toolform></app-toolform>
     </div>
-  </div>  
-</div>
+  </div>
+  <!-- DLS Calculator div -->
+  <div *ngIf="isDLSVisible" class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
+    <app-table-cell></app-table-cell>
+  </div>
+
+  <mat-tab-group animationDuration="1000ms">
+    <!-- Meter SEEN calculation Here -->
+    <mat-tab label="METER SEEN">    
+      <div class="ml-0 d-flex flex-column float-start mt-5" style="width: 300px">
+        <p class="fw-bold text-white" style="margin-left: -20%">
+          Current Sensor Offset:
+          <span class="text-info">{{ tool.sensor_offset || 0 }}</span> m
+        </p>
+        <p class="fw-bold text-white" style="margin-left: -10%">
+          Default Motor Output:
+          <span class="text-info">{{ tool.default_bur || 0 }}</span> deg/30m
+        </p>
+      </div>
+      <table class="table table-striped table-responsive">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">DP Length</th>
+            <th scope="col">Bit Depth</th>
+            <th scope="col">Survey Depth</th>
+            <th scope="col">Inc</th>
+            <th scope="col">Azi</th>
+            <th scope="col">Meters SEEN</th>
+            <th scope="col">Dls(WA) /30m</th>
+            <th scope="col">DLS/ 30m</th>
+            <th scope="col">Motor Yield</th>
+            <th scope="col">ToolFace</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Total Slid Dist</th>
+            <th scope="col">Seen - Unseen</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let survey of surveys.slice().reverse()">
+            <th scope="row" class="align-middle">{{ survey.id }}</th>
+            <td class="align-middle">
+              {{ survey.dp_length !== 0 ? survey.dp_length.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle">{{ survey.bit_depth.toFixed(2) }}</td>
+            <td class="align-middle text-primary fw-bold">
+              {{ survey.survey_depth | number : "1.2-2" }}
+            </td>
+            <td class="align-middle text-primary fw-bold">{{ survey.inc }}</td>
+            <td class="align-middle text-primary fw-bold">{{ survey.azi }}</td>
+            <td class="align-middle">
+              {{ survey.totalseen !== 0 ? survey.totalseen.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle">
+              {{ survey.dlsWa !== 0 ? survey.dlsWa.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle">
+              {{ survey.dls30m !== 0 ? survey.dls30m.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle text-danger fw-bold">
+              {{ survey.motorYield !== 0 ? survey.motorYield.toFixed(2) : "-" }}
+            </td>
+            <!-- condition process toolface to add arrow icon -->
+            <ng-container *ngIf="isToolfaceInRange(survey.toolface) !== ''">
+              <td class="align-middle">
+                {{ survey.toolface }}
+                <i class="fa" [ngClass]="{'fa-arrow-down text-danger': isToolfaceInRange(survey.toolface) === 'down', 
+                              'fa-arrow-up text-success ': isToolfaceInRange(survey.toolface) === 'up'}"
+                  aria-hidden="true">
+                </i>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="isToolfaceInRange(survey.toolface) === ''">
+              <td></td>
+            </ng-container>
+    
+            <td class="align-middle text-danger fw-bold">{{ survey.st !== 0 ? survey.st.toFixed(2) : "-" }}</td>
+            <td class="align-middle text-danger fw-bold">{{ survey.ed !== 0 ? survey.ed.toFixed(2) : "-" }}</td>
+            <td class="align-middle">
+              {{ survey.totalslid !== 0 ? survey.totalslid : "-" }}
+            </td>
+            <td class="mt-2">
+              <table class="table mb-0">
+                <tr>
+                  <td class="align-middle" style="width: 50%;">
+                    {{ survey.slidseen !== 0 ? survey.slidseen.toFixed(2) : "-" }}
+                  </td>
+                  <td class="align-middle" style="width: 50%;">
+                    {{ survey.slidunseen !== 0 ? survey.slidunseen.toFixed(2) : "-" }}
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td class="align-middle">
+              <a href="" style="margin-right: 20px" (click)="deleteSurvey(survey.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                  <path
+                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                </svg>
+              </a>
+              <a href="" [routerLink]="['/edit', survey.id]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" viewBox="0 0 512 512">
+                  <path
+                    d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
+                </svg>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn fw-bold bg-warning text-danger shadow-btn my-3" (click)="updateAllSurveys()">>>>
+        Process <<< </button>   
+          
+    </mat-tab>
+    <!-- Meter AHEAD calculation Here -->
+    <mat-tab label="METER AHEAD">
+      <!-- Meter Ahead Calculation Here -->
+      <div class="ml-0 d-flex flex-column float-start mt-5" style="width: 300px">
+        <p class="fw-bold text-white" style="margin-left: -20%">
+          Current Sensor Offset:
+          <span class="text-info">{{ tool.sensor_offset || 0 }}</span> m
+        </p>
+        <p class="fw-bold text-white" style="margin-left: -10%">
+          Default Motor Output:
+          <span class="text-info">{{ tool.default_bur || 0 }}</span> deg/30m
+        </p>
+      </div>
+      <table class="table table-striped table-responsive">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">DP Length</th>
+            <th scope="col">Survey Depth</th>
+            <th scope="col">Inc</th>
+            <th scope="col">Azi</th>
+            <th scope="col">Meters SEEN</th>
+            <th scope="col">Meters AHEAD to Bit</th>
+            <th scope="col">Bit Depth</th>            
+            <th scope="col">DLS/ 30m</th>
+            <th scope="col">Motor Yield</th>
+            <th scope="col">ToolFace</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Total Slid Dist</th>
+            <th scope="col">Seen - Unseen</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let survey of surveys.slice().reverse()">
+            <th scope="row" class="align-middle">{{ survey.id }}</th>
+            <td class="align-middle">
+              {{ survey.dp_length !== 0 ? survey.dp_length.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle text-primary fw-bold">
+              {{ survey.survey_depth | number : "1.2-2" }}
+            </td>
+            <td class="align-middle text-primary fw-bold">{{ survey.inc }}</td>
+            <td class="align-middle text-primary fw-bold">{{ survey.azi }}</td>
+            <td class="align-middle">
+              {{ survey.totalseen !== 0 ? survey.totalseen.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle">
+              {{ survey.meterAhead !== 0 ? survey.meterAhead.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle">{{ survey.bit_depth.toFixed(2) }}</td>
+            <td class="align-middle">
+              {{ survey.dls30m !== 0 ? survey.dls30m.toFixed(2) : "-" }}
+            </td>
+            <td class="align-middle text-danger fw-bold">
+              {{ survey.motorYield !== 0 ? survey.motorYield.toFixed(2) : "-" }}
+            </td>
+            <!-- condition process toolface to add arrow icon -->
+            <ng-container *ngIf="isToolfaceInRange(survey.toolface) !== ''">
+              <td class="align-middle">
+                {{ survey.toolface }}
+                <i class="fa" [ngClass]="{'fa-arrow-down text-danger': isToolfaceInRange(survey.toolface) === 'down', 
+                              'fa-arrow-up text-success ': isToolfaceInRange(survey.toolface) === 'up'}"
+                  aria-hidden="true">
+                </i>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="isToolfaceInRange(survey.toolface) === ''">
+              <td></td>
+            </ng-container>
+    
+            <td class="align-middle text-danger fw-bold">{{ survey.st !== 0 ? survey.st.toFixed(2) : "-" }}</td>
+            <td class="align-middle text-danger fw-bold">{{ survey.ed !== 0 ? survey.ed.toFixed(2) : "-" }}</td>
+            <td class="align-middle">
+              {{ survey.totalslid !== 0 ? survey.totalslid : "-" }}
+            </td>
+            <td class="mt-2">
+              <table class="table mb-0">
+                <tr>
+                  <td class="align-middle" style="width: 50%;">
+                    {{ survey.slidseen !== 0 ? survey.slidseen.toFixed(2) : "-" }}
+                  </td>
+                  <td class="align-middle" style="width: 50%;">
+                    {{ survey.slidunseen !== 0 ? survey.slidunseen.toFixed(2) : "-" }}
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td class="align-middle">
+              <a href="" style="margin-right: 20px" (click)="deleteSurvey(survey.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                  <path
+                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                </svg>
+              </a>
+              <a href="" [routerLink]="['/edit', survey.id]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" viewBox="0 0 512 512">
+                  <path
+                    d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
+                </svg>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn fw-bold bg-warning text-danger shadow-btn my-3" (click)="updateAllSurveys()">>>>
+        Process <<< </button>
+    
+          <div class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
+            <!-- Column for Survey Form -->
+            <div class="col-lg-4 col-md-6 mb-4">
+              <app-surveyform></app-surveyform>
+            </div>
+    
+            <!-- Column for Sliding Form -->
+            <div class="col-lg-4 col-md-6 mb-4">
+              <app-slidingform></app-slidingform>
+            </div>
+    
+            <!-- Column for Tool Form -->
+            <div class="col-lg-4 col-md-6 mb-4">
+              <app-toolform></app-toolform>
+            </div>
+          </div>
+    </mat-tab>
+    <!-- Slide Distance / Motor Yield Calculation -->
+    <mat-tab label="Slide Distance Calculation">
+      <div class="fluid-container d-flex mt-5 mb-5 text-center d-flex justify-content-between">
+        <!-- Caculate Slide distance with Rotary Effect -->
+        <div class="Slide-Distance mx-5">
+          <h2>Slide Distance <span class="fst-italic text-warning">(with ROTARY EFFECT)</span></h2>
+          <form [formGroup]="formSlide">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYield">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>DLS Required (deg/30m)</mat-label>
+                <input matInput placeholder="DLS Required (deg/30m)" formControlName="dlsRequired">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Rotary Effect (deg/30m)</mat-label>
+                <input matInput placeholder="Rotary DLS (deg/30m)" formControlName="rotDls">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length</mat-label>
+                <input matInput placeholder="Single Length" formControlName="singleLength">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide Dist (m)</mat-label>
+                <textarea matInput placeholder="Slide Dist (m)" formControlName="slideDist" class="fw-bold text-danger" ></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide %</mat-label>
+                <textarea matInput placeholder="Slide %" formControlName="slidePercent" class="fw-bold text-warning"></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateSlideWithRotaryEffect()">Calculate</button>
+          </form>
+        </div>
+
+        <!-- Caculate Slide distance without Rotary Effect -->
+        <div class="Slide-Distance mx-5">
+          <h2>Slide Distance <span class="fst-italic text-light">(NO ROTARY EFFECT)</span></h2>
+          <form [formGroup]="form">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYield">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>DLS Required (deg/30m)</mat-label>
+                <input matInput placeholder="DLS Required (deg/30m)" formControlName="dlsRequired">
+              </mat-form-field>
+            </p>
+            <div style="height: 86px;">
+
+            </div>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length</mat-label>
+                <input matInput placeholder="Single Length" formControlName="length">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide Dist (m)</mat-label>
+                <textarea matInput placeholder="Slide Dist (m)" formControlName="slideDist" class="fw-bold text-danger" ></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide %</mat-label>
+                <textarea matInput placeholder="Slide %" formControlName="slidePercent" class="fw-bold text-warning"></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateValues()">Calculate</button>
+          </form>
+        </div>
+        <!-- Calculate BUR -->
+        <div class="BUR mx-5">
+          <h2>Calculate Target BUR</h2>
+          <form [formGroup]="formBUR">
+            <p>
+              <mat-form-field>
+                <mat-label>DLG (deg/m)</mat-label>
+                <input matInput placeholder="DLG (deg/30m)" formControlName="dlg">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Start Inc (deg)</mat-label>
+                <input matInput placeholder="Start Inc (deg)" formControlName="incStart">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>End Inc (deg)</mat-label>
+                <input matInput placeholder="End Inc (deg)" formControlName="incEnd">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length (m)</mat-label>
+                <input matInput placeholder="Single Length (m)" formControlName="singleLength" >
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Expected BUR</mat-label>
+                <textarea matInput placeholder="Expected BUR" formControlName="expectBUR" class="text-warning fw-bold" ></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateBUR()">Calculate</button>
+          </form>
+        </div>
+
+        <!-- Projection to Bit -->
+        <div class="BUR mx-5">
+          <h2>DLS for Projection to Bit</h2>
+          <form [formGroup]="form">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYieldForProjection">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Sliding Length (m)</mat-label>
+                <input matInput placeholder="Sliding Length" formControlName="slideLength">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length (m)</mat-label>
+                <input matInput placeholder="Single Length" formControlName="singleLengthForDLS">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Expected DLS (deg/30m)</mat-label>
+                <textarea matInput placeholder="Expected DLS" formControlName="expectDLS" class="text-warning fw-bold" ></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateDLSForPrj()">Calculate</button>
+          </form>
+        </div>
+      </div>      
+    </mat-tab>
+  </mat-tab-group>
 <app-footer></app-footer>
 

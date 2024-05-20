@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { ToolService } from '../services/tool.service';
 import { ToolDTO } from '../dtos/tool.dto';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';   // reactive Form
+
 
 @Component({
   selector: 'app-home',
@@ -14,12 +16,48 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   surveys: SurveyDTO[] = [];
   tool: ToolDTO = new ToolDTO(0); // Initialize tool object as null
+  form: FormGroup;
+  formBUR: FormGroup;
+  formSlide: FormGroup;
+
+  // boolean toggle button
+  isFormsDivVisible = false;
+  isDLSVisible = false;
 
   constructor(
     private surveyService: SurveyService,
     private toolService: ToolService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      motorYield: [''],
+      dlsRequired: [''],
+      length:[''],
+      singleLengthForDLS: [''],
+      slideLength:[''],
+      motorYieldForProjection:[''],
+      slideDist: [{ value: '', disabled: true }],
+      slidePercent: [{ value: '', disabled: true }],
+      expectDLS: [{ value: '', disabled: true }],
+    });
+    this.formBUR = this.fb.group({
+      dlg:[''],
+      incStart:[''],
+      incEnd:[''],
+      singleLength:[''],
+      expectBUR: [{value:'', disabled: true}]
+    });
+    this.formSlide = this.fb.group({
+      motorYield: [''],
+      dlsRequired: [''],
+      singleLength:[''],
+      slideLength:[''],
+      rotDls:[''],
+      slideDist: [{ value: '', disabled: true }],
+      slidePercent: [{ value: '', disabled: true }],
+    })
+  }
 
   // Load component xong thuc hien getAll() ngay
   ngOnInit(): void {
@@ -50,6 +88,7 @@ export class HomeComponent implements OnInit {
             totalslid: survey.totalSlid,
             slidseen: survey.slidSeen,
             slidunseen: survey.slidUnseen,
+            meterAhead: survey.meterAhead,
           };
         });
       },
@@ -84,6 +123,7 @@ export class HomeComponent implements OnInit {
             totalslid: survey.totalSlid,
             slidseen: survey.slidSeen,
             slidunseen: survey.slidUnseen,
+            meterAhead: survey.meterAhead
           };
         });
       },
@@ -148,4 +188,85 @@ export class HomeComponent implements OnInit {
     
     return '';
   }  
+
+  // calculate Slide distance
+  calculateValues() {
+    const motorYield = parseFloat(this.form.value.motorYield);
+    const dlsRequired = parseFloat(this.form.value.dlsRequired);
+    const singleLength = parseFloat(this.form.value.length);
+
+    if (!isNaN(motorYield) && !isNaN(dlsRequired)) {
+      // Calculation logic
+      const slidePercent =  dlsRequired / motorYield;  // slide percent 
+      const slideDist = singleLength * slidePercent;   // slide distance  
+
+      this.form.patchValue({
+        slideDist: slideDist.toFixed(2),
+        slidePercent: (slidePercent * 100).toFixed(0)
+      });
+    }
+  }
+
+  // calculate slide distance with Rotary Effect
+  calculateSlideWithRotaryEffect() {
+    const motorYield = parseFloat(this.formSlide.value.motorYield);
+    const dlsRequired = parseFloat(this.formSlide.value.dlsRequired);
+    const rotDls = parseFloat(this.formSlide.value.rotDls);
+    const singleLength = parseFloat(this.formSlide.value.singleLength);
+
+    if (!isNaN(motorYield) && !isNaN(dlsRequired) && !isNaN(rotDls)) {
+      // Calculation logic
+      const slidePercent = (dlsRequired - rotDls) / (motorYield - rotDls);
+      const slideDist = singleLength * slidePercent;
+    
+      this.formSlide.patchValue({
+        slidePercent: (slidePercent* 100).toFixed(0),
+        slideDist: slideDist.toFixed(2)
+      })
+    }    
+  }
+
+  // calculate BUR
+  calculateBUR() {
+    const dlg = parseFloat(this.formBUR.value.dlg);
+    const incStart = parseFloat(this.formBUR.value.incStart);
+    const incEnd = parseFloat(this.formBUR.value.incEnd);
+    const singleLength = parseFloat(this.formBUR.value.singleLength);
+
+    if (!isNaN(dlg) && !isNaN(incStart) && !isNaN(incEnd) && !isNaN(singleLength)) {
+      // calculation logic
+      const expectBur = Math.abs(incEnd-incStart) * 30 / singleLength;
+
+      this.formBUR.patchValue({
+        expectBUR: expectBur.toFixed(2)
+      })
+    }
+  }
+
+  // calculate DLS for Projection
+  calculateDLSForPrj() {
+    const motorYieldForProjection = parseFloat(this.form.value.motorYieldForProjection);
+    const slideLength = parseFloat(this.form.value.slideLength);
+    const singleLengthForDLS = parseFloat(this.form.value.singleLengthForDLS);
+
+    if (!isNaN(motorYieldForProjection) && !isNaN(slideLength) && !isNaN(singleLengthForDLS)) {
+      // calculation logic
+      const expectDLS = (slideLength / singleLengthForDLS) * motorYieldForProjection;
+
+      this.form.patchValue({
+        expectDLS: expectDLS.toFixed(2)
+      })
+    }
+  }
+
+  // Method to toggle the visibility of the div
+  toggleFormsDivVisibility() {
+    this.isFormsDivVisible = !this.isFormsDivVisible;
+  }
+
+  // Method to toggle the visibility of the div
+  toggleDLSDivVisibility() {
+    this.isDLSVisible = !this.isDLSVisible;
+  }
 }
+
