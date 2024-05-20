@@ -19,8 +19,13 @@ import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ToolService } from './tool.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // required for Angular Material
 import {MatTabsModule} from '@angular/material/tabs';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { TableCellComponent } from '../table-cell/table-cell.component';
 
 @NgModule({
   declarations: [
@@ -36,15 +41,24 @@ import {MatTabsModule} from '@angular/material/tabs';
     HoldmodeComponent,
     ToolformComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    TableCellComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, MatTabsModule],
+  imports: [BrowserModule, 
+            FormsModule, 
+            HttpClientModule, 
+            AppRoutingModule, 
+            BrowserAnimationsModule, // required for Angular Material
+            MatTabsModule,
+            ReactiveFormsModule,
+            MatFormFieldModule,
+            MatInputModule,
+            MatButtonModule,
+            ],
+
   providers: [SurveyService, 
-    ToolService, 
-    {provide: LocationStrategy, useClass: HashLocationStrategy}],
+              ToolService, 
+              {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-
-//

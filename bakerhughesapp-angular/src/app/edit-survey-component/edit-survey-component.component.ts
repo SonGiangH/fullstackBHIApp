@@ -107,7 +107,7 @@ export class EditSurveyComponentComponent implements OnInit {
       inc: this.survey.inc,
       azi: this.survey.azi,
       totalseen: 0,
-      dlsWa: 0,
+      dlsWa: this.survey.dlsWa,
       dls30m: 0,
       motorYield: 0,
       toolface: this.survey.toolface,

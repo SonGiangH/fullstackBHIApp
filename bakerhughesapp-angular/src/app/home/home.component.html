@@ -1,10 +1,37 @@
 <app-header></app-header>
 <div class="container-fluid my-4" *ngIf="surveys">
   <h1 class="my-4">Motor Sliding Sheet created by Son Giang</h1>
+  <div class="d-flex w-25 justify-content-between mb-3">
+    <button mat-raised-button shadow-btn (click)="toggleFormsDivVisibility()">
+      Input Form
+    </button>
+    <button mat-raised-button shadow-btn (click)="toggleDLSDivVisibility()">
+      DLS Calculator
+    </button>
+  </div>
+  <!-- input form div -->
+  <div *ngIf="isFormsDivVisible" class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
+    <!-- Column for Survey Form -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <app-surveyform></app-surveyform>
+    </div>  
+    <!-- Column for Sliding Form -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <app-slidingform></app-slidingform>
+    </div>  
+    <!-- Column for Tool Form -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <app-toolform></app-toolform>
+    </div>
+  </div>
+  <!-- DLS Calculator div -->
+  <div *ngIf="isDLSVisible" class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
+    <app-table-cell></app-table-cell>
+  </div>
+
   <mat-tab-group animationDuration="1000ms">
     <!-- Meter SEEN calculation Here -->
-    <mat-tab label="METER SEEN">
-    
+    <mat-tab label="METER SEEN">    
       <div class="ml-0 d-flex flex-column float-start mt-5" style="width: 300px">
         <p class="fw-bold text-white" style="margin-left: -20%">
           Current Sensor Offset:
@@ -37,7 +64,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let survey of surveys">
+          <tr *ngFor="let survey of surveys.slice().reverse()">
             <th scope="row" class="align-middle">{{ survey.id }}</th>
             <td class="align-middle">
               {{ survey.dp_length !== 0 ? survey.dp_length.toFixed(2) : "-" }}
@@ -112,26 +139,10 @@
         </tbody>
       </table>
       <button type="button" class="btn fw-bold bg-warning text-danger shadow-btn my-3" (click)="updateAllSurveys()">>>>
-        Process <<< </button>
-    
-          <div class="d-flex flex-wrap justify-content-between" style="margin-left: 20px;">
-            <!-- Column for Survey Form -->
-            <div class="col-lg-4 col-md-6 mb-4">
-              <app-surveyform></app-surveyform>
-            </div>
-    
-            <!-- Column for Sliding Form -->
-            <div class="col-lg-4 col-md-6 mb-4">
-              <app-slidingform></app-slidingform>
-            </div>
-    
-            <!-- Column for Tool Form -->
-            <div class="col-lg-4 col-md-6 mb-4">
-              <app-toolform></app-toolform>
-            </div>
-          </div>
+        Process <<< </button>   
+          
     </mat-tab>
-
+    <!-- Meter AHEAD calculation Here -->
     <mat-tab label="METER AHEAD">
       <!-- Meter Ahead Calculation Here -->
       <div class="ml-0 d-flex flex-column float-start mt-5" style="width: 300px">
@@ -166,7 +177,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let survey of surveys">
+          <tr *ngFor="let survey of surveys.slice().reverse()">
             <th scope="row" class="align-middle">{{ survey.id }}</th>
             <td class="align-middle">
               {{ survey.dp_length !== 0 ? survey.dp_length.toFixed(2) : "-" }}
@@ -260,8 +271,164 @@
             </div>
           </div>
     </mat-tab>
-    <mat-tab label="ROTARY EFFECT">Content 3</mat-tab>
+    <!-- Slide Distance / Motor Yield Calculation -->
+    <mat-tab label="Slide Distance Calculation">
+      <div class="fluid-container d-flex mt-5 mb-5 text-center d-flex justify-content-between">
+        <!-- Caculate Slide distance with Rotary Effect -->
+        <div class="Slide-Distance mx-5">
+          <h2>Slide Distance <span class="fst-italic text-warning">(with ROTARY EFFECT)</span></h2>
+          <form [formGroup]="formSlide">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYield">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>DLS Required (deg/30m)</mat-label>
+                <input matInput placeholder="DLS Required (deg/30m)" formControlName="dlsRequired">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Rotary Effect (deg/30m)</mat-label>
+                <input matInput placeholder="Rotary DLS (deg/30m)" formControlName="rotDls">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length</mat-label>
+                <input matInput placeholder="Single Length" formControlName="singleLength">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide Dist (m)</mat-label>
+                <textarea matInput placeholder="Slide Dist (m)" formControlName="slideDist" class="fw-bold text-danger" ></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide %</mat-label>
+                <textarea matInput placeholder="Slide %" formControlName="slidePercent" class="fw-bold text-warning"></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateSlideWithRotaryEffect()">Calculate</button>
+          </form>
+        </div>
+
+        <!-- Caculate Slide distance without Rotary Effect -->
+        <div class="Slide-Distance mx-5">
+          <h2>Slide Distance <span class="fst-italic text-light">(NO ROTARY EFFECT)</span></h2>
+          <form [formGroup]="form">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYield">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>DLS Required (deg/30m)</mat-label>
+                <input matInput placeholder="DLS Required (deg/30m)" formControlName="dlsRequired">
+              </mat-form-field>
+            </p>
+            <div style="height: 86px;">
+
+            </div>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length</mat-label>
+                <input matInput placeholder="Single Length" formControlName="length">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide Dist (m)</mat-label>
+                <textarea matInput placeholder="Slide Dist (m)" formControlName="slideDist" class="fw-bold text-danger" ></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Slide %</mat-label>
+                <textarea matInput placeholder="Slide %" formControlName="slidePercent" class="fw-bold text-warning"></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateValues()">Calculate</button>
+          </form>
+        </div>
+        <!-- Calculate BUR -->
+        <div class="BUR mx-5">
+          <h2>Calculate Target BUR</h2>
+          <form [formGroup]="formBUR">
+            <p>
+              <mat-form-field>
+                <mat-label>DLG (deg/m)</mat-label>
+                <input matInput placeholder="DLG (deg/30m)" formControlName="dlg">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Start Inc (deg)</mat-label>
+                <input matInput placeholder="Start Inc (deg)" formControlName="incStart">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>End Inc (deg)</mat-label>
+                <input matInput placeholder="End Inc (deg)" formControlName="incEnd">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length (m)</mat-label>
+                <input matInput placeholder="Single Length (m)" formControlName="singleLength" >
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Expected BUR</mat-label>
+                <textarea matInput placeholder="Expected BUR" formControlName="expectBUR" class="text-warning fw-bold" ></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateBUR()">Calculate</button>
+          </form>
+        </div>
+
+        <!-- Projection to Bit -->
+        <div class="BUR mx-5">
+          <h2>DLS for Projection to Bit</h2>
+          <form [formGroup]="form">
+            <p>
+              <mat-form-field>
+                <mat-label>Motor Yield (deg/30m)</mat-label>
+                <input matInput placeholder="Motor Yield (deg/30m)" formControlName="motorYieldForProjection">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Sliding Length (m)</mat-label>
+                <input matInput placeholder="Sliding Length" formControlName="slideLength">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Single Length (m)</mat-label>
+                <input matInput placeholder="Single Length" formControlName="singleLengthForDLS">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Expected DLS (deg/30m)</mat-label>
+                <textarea matInput placeholder="Expected DLS" formControlName="expectDLS" class="text-warning fw-bold" ></textarea>
+              </mat-form-field>
+            </p>
+            <button mat-raised-button color="primary" type="button" class="shadow-btn" (click)="calculateDLSForPrj()">Calculate</button>
+          </form>
+        </div>
+      </div>      
+    </mat-tab>
   </mat-tab-group>
-  
 <app-footer></app-footer>
 
