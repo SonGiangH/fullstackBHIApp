@@ -76,6 +76,7 @@ ng build --configuration production
 
 # Edit index.html file inside dist/angular-app-name
 # Copy all files inside dist/angular-app-name into server folder /var/www/html/
+scp -pr kinhdichapp/* root@your_server:/var/www/html/
 
 # Install nginx on server
 apt install nginx
