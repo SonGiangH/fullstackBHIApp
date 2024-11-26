@@ -97,6 +97,10 @@ sudo ln -s /etc/nginx/sites-available/myserver.config /etc/nginx/sites-enabled/m
 # Check syntax of nginx config and restart nginx
 nginx -t
 sudo systemctl restart nginx
+
+# Delete all Docker Images
+docker rmi -f $(docker images -aq)
+
 # Commands to delete Docker containers and images
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
